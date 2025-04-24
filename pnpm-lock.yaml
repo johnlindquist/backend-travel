@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@hono/node-server':
+        specifier: ^1.14.1
+        version: 1.14.1(hono@4.7.7)
       '@hono/swagger-ui':
         specifier: ^0.5.1
         version: 0.5.1(hono@4.7.7)
@@ -17,6 +20,9 @@ importers:
       better-sqlite3:
         specifier: ^11.9.1
         version: 11.9.1
+      detect-port:
+        specifier: ^2.1.0
+        version: 2.1.0
       drizzle-orm:
         specifier: ^0.43.0
         version: 0.43.0(@types/better-sqlite3@7.6.13)(better-sqlite3@11.9.1)
@@ -340,6 +346,12 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@hono/node-server@1.14.1':
+    resolution: {integrity: sha512-vmbuM+HPinjWzPe7FFPWMMQMsbKE9gDPhaH0FFdqbGpkT5lp++tcWDTxwBl5EgS5y6JVgIaCdjeHRfQ4XRBRjQ==}
+    engines: {node: '>=18.14.1'}
+    peerDependencies:
+      hono: ^4
+
   '@hono/swagger-ui@0.5.1':
     resolution: {integrity: sha512-XpUCfszLJ9b1rtFdzqOSHfdg9pfBiC2J5piEjuSanYpDDTIwpMz0ciiv5N3WWUaQpz9fEgH8lttQqL41vIFuDA==}
     peerDependencies:
@@ -363,6 +375,10 @@ packages:
 
   '@types/node@22.14.1':
     resolution: {integrity: sha512-u0HuPQwe/dHrItgHHpmw3N2fYCR6x4ivMNbPHRkBVP4CvN+kiRrKHWk3i8tXiO/joPwXLMYvF9TTF0eqgHIuOw==}
+
+  address@2.0.3:
+    resolution: {integrity: sha512-XNAb/a6TCqou+TufU8/u11HCu9x1gYvOoxLwtlXgIqmkrYQADVv6ljyW2zwiPhHz9R1gItAWpuDrdJMmrOBFEA==}
+    engines: {node: '>= 16.0.0'}
 
   base64-js@1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
@@ -405,6 +421,11 @@ packages:
   detect-libc@2.0.4:
     resolution: {integrity: sha512-3UDv+G9CsCKO1WKMGw9fwq/SWJYbI0c5Y7LU1AXYoDdbhE2AHQ6N6Nb34sG8Fj7T5APy8qXDCKuuIHd1BR0tVA==}
     engines: {node: '>=8'}
+
+  detect-port@2.1.0:
+    resolution: {integrity: sha512-epZuWb/6Q62L+nDHJc/hQAqf8pylsqgk3BpZXVBx1CDnr3nkrVNn73Uu1rXcFzkNcc+hkP3whuOg7JZYaQB65Q==}
+    engines: {node: '>= 16.0.0'}
+    hasBin: true
 
   drizzle-kit@0.31.0:
     resolution: {integrity: sha512-pcKVT+GbfPA+bUovPIilgVOoq+onNBo/YQBG86sf3/GFHkN6lRJPm1l7dKN0IMAk57RQoIm4GUllRrasLlcaSg==}
@@ -821,6 +842,10 @@ snapshots:
   '@esbuild/win32-x64@0.25.3':
     optional: true
 
+  '@hono/node-server@1.14.1(hono@4.7.7)':
+    dependencies:
+      hono: 4.7.7
+
   '@hono/swagger-ui@0.5.1(hono@4.7.7)':
     dependencies:
       hono: 4.7.7
@@ -844,6 +869,8 @@ snapshots:
   '@types/node@22.14.1':
     dependencies:
       undici-types: 6.21.0
+
+  address@2.0.3: {}
 
   base64-js@1.5.1: {}
 
@@ -882,6 +909,10 @@ snapshots:
   deep-extend@0.6.0: {}
 
   detect-libc@2.0.4: {}
+
+  detect-port@2.1.0:
+    dependencies:
+      address: 2.0.3
 
   drizzle-kit@0.31.0:
     dependencies:

@@ -1,40 +1,67 @@
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { swaggerUI } from '@hono/swagger-ui';
+import { serve } from '@hono/node-server'; // Import serve
+import detectPort from 'detect-port'; // Import detect-port
 import flightsApp from './routes/flights'; // Import the flights router
 
-// Use OpenAPIHono for the main app to support OpenAPI features
-const app = new OpenAPIHono();
+// Database connection happens implicitly when db module is imported
+// Ensure db logs happen before server start logs
+import '../db';
 
-// Mount the flights router under the /flights path
-app.route('/flights', flightsApp);
+const DEFAULT_PORT = 3000;
 
-// Basic root route (optional, kept from initial setup)
-app.get('/', (c) => {
-    return c.text('Hello Hono! Base API endpoint.');
+async function startServer() {
+    const port = await detectPort(DEFAULT_PORT);
+
+    if (port !== DEFAULT_PORT) {
+        console.warn(`WARN: Port ${DEFAULT_PORT} was occupied, using ${port} instead.`);
+    }
+
+    // Use OpenAPIHono for the main app
+    const app = new OpenAPIHono();
+
+    // Mount the flights router
+    app.route('/flights', flightsApp);
+
+    // Basic root route
+    app.get('/', (c) => {
+        return c.text('Hello Hono! Base API endpoint.');
+    });
+
+    // --- OpenAPI Documentation Setup ---
+    app.doc('/doc', {
+        openapi: '3.0.0',
+        info: {
+            version: '1.0.0',
+            title: 'Travel API',
+            description: 'API for querying travel booking data.',
+        },
+    });
+
+    app.get('/ui', swaggerUI({ url: '/doc' }));
+
+    // --- Start Server ---
+    serve({
+        fetch: app.fetch,
+        port: port,
+    }, (info) => {
+        // Updated logs using the actual detected port
+        console.log(`Server listening on http://localhost:${info.port}`);
+        console.log(`Swagger UI available at http://localhost:${info.port}/ui`);
+        console.log(`OpenAPI Spec available at http://localhost:${info.port}/doc`);
+    });
+
+    // Remove old export style
+    // export default serverConfig;
+}
+
+// Start the server
+startServer().catch(err => {
+    console.error("Failed to start server:", err);
+    process.exit(1);
 });
 
-// --- OpenAPI Documentation Setup ---
-
-// The /doc endpoint serves the OpenAPI specification (JSON)
-app.doc('/doc', {
-    openapi: '3.0.0',
-    info: {
-        version: '1.0.0',
-        title: 'Travel API',
-        description: 'API for querying travel booking data.',
-    },
-});
-
-// The /ui endpoint serves the Swagger UI
-app.get('/ui', swaggerUI({ url: '/doc' }));
-
-// --- Server Export ---
-// Use the default export format expected by Bun/Node adapters
-export default {
-    port: 3000, // Default port
-    fetch: app.fetch,
-};
-
-console.log('Server setup complete. Ready to run.');
-console.log('Swagger UI available at /ui');
-console.log('OpenAPI Spec available at /doc'); 
+// Remove previous logging outside the serve callback
+// console.log(`Server listening on http://localhost:${serverConfig.port}`);
+// console.log(`Swagger UI available at http://localhost:${serverConfig.port}/ui`);
+// console.log(`OpenAPI Spec available at http://localhost:${serverConfig.port}/doc`); 
