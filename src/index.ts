@@ -3,10 +3,8 @@ import { swaggerUI } from '@hono/swagger-ui';
 import { serve } from '@hono/node-server'; // Import serve
 import detectPort from 'detect-port'; // Import detect-port
 import flightsApp from './routes/flights'; // Import the flights router
-
-// Import the db instance explicitly to potentially help tsx module resolution.
-// Even though db isn't used directly here, this ensures the module connects.
-import { db } from '../db/index.ts';
+// import bookingsApp from './routes/bookings'; // Import the bookings router - TEMPORARILY COMMENTED FOR STEP 1
+import { db } from './db/index'; // Corrected import path
 
 const DEFAULT_PORT = 3000;
 
