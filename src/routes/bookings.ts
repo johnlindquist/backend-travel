@@ -1,4 +1,6 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
+import { db } from '../db/index'; // Import drizzle instance
+import * as schema from '../db/schema'; // Import all schemas
 
 // Define Zod schema for the booking data in the response
 export const BookingSchema = z.object({
@@ -28,4 +30,26 @@ export const getAllBookingsRoute = createRoute({
     tags: ['Bookings'],
 });
 
-// (More code will be added to this file in subsequent steps) 
+// Create a new Hono app specific to bookings
+const bookingsApp = new OpenAPIHono();
+
+// Implement the GET all bookings route handler
+bookingsApp.openapi(getAllBookingsRoute, async (c) => {
+    const bookingsData = await db.select({
+        bookRef: schema.bookings.bookRef,
+        bookDate: schema.bookings.bookDate, // Select the raw timestamp
+        totalAmount: schema.bookings.totalAmount,
+    }).from(schema.bookings);
+
+    // Format the data for the API response
+    const bookings = bookingsData.map(booking => ({
+        ...booking,
+        // Convert timestamp (assuming it's a JavaScript Date object from Drizzle) to ISO string
+        bookDate: booking.bookDate.toISOString(),
+        // totalAmount is already string, no conversion needed here
+    }));
+
+    return c.json(bookings);
+});
+
+export default bookingsApp; // Export the Hono app for bookings 
