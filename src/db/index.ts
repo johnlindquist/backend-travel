@@ -16,8 +16,13 @@ console.log(`Connected to database at: ${dbPath}`);
 
 // Optional: Add a check to ensure the connection is successful
 try {
-    const result = sqlite.prepare('SELECT sqlite_version()').get();
-    console.log('SQLite version:', result['sqlite_version()']);
+    // Cast the result to an object with the expected property
+    const result = sqlite.prepare('SELECT sqlite_version()').get() as { 'sqlite_version()': string };
+    if (result && typeof result['sqlite_version()'] === 'string') {
+        console.log('SQLite version:', result['sqlite_version()']);
+    } else {
+        console.warn('Could not retrieve SQLite version.');
+    }
 } catch (error) {
     console.error('Failed to connect to the database:', error);
     process.exit(1);
