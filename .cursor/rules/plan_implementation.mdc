@@ -1,0 +1,17 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+# Plan Implementation Workflow
+
+When implementing steps outlined in a plan file (typically found in the `plans/` directory or with a name like `*_plan.md`), follow this workflow:
+
+1.  **Implement One Step:** Focus on completing a single, distinct step from the plan.
+2.  **Verify (If Applicable):** Use available tools (like running commands or tests) to verify that the implemented step works as expected.
+3.  **Commit Changes:** Stage the changes related *only* to the completed step and create a Git commit.
+    *   The commit message should clearly state which step was completed (e.g., "feat: Implement step X - Short description").
+    *   **Do not** use `--no-verify`. Address any pre-commit hook failures before committing.
+4.  **Proceed:** Move on to the next step in the plan.
+
+This ensures that progress is tracked incrementally via Git.
