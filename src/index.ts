@@ -6,7 +6,7 @@ import flightsApp from './routes/flights'; // Import the flights router
 
 // Database connection happens implicitly when db module is imported
 // Ensure db logs happen before server start logs
-import '../db';
+import '../db/index.ts'; // Explicitly import the .ts file
 
 const DEFAULT_PORT = 3000;
 
