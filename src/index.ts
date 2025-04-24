@@ -4,9 +4,9 @@ import { serve } from '@hono/node-server'; // Import serve
 import detectPort from 'detect-port'; // Import detect-port
 import flightsApp from './routes/flights'; // Import the flights router
 
-// Database connection happens implicitly when db module is imported
-// Ensure db logs happen before server start logs
-import '../db/index.ts'; // Explicitly import the .ts file
+// Import the db instance explicitly to potentially help tsx module resolution.
+// Even though db isn't used directly here, this ensures the module connects.
+import { db } from '../db/index.ts';
 
 const DEFAULT_PORT = 3000;
 
