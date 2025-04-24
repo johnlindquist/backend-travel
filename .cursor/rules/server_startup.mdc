@@ -1,0 +1,21 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Server Startup and Routing
+
+The main entry point for the Hono server is [src/index.ts](mdc:src/index.ts).
+
+## Key Aspects:
+*   **Initialization:** It uses `detect-port` to find an available port (starting from 3000) to avoid conflicts.
+*   **Server:** It uses `@hono/node-server`'s `serve` function to start the HTTP server.
+*   **Hono App:** An `OpenAPIHono` instance is created to enable OpenAPI features.
+*   **Routing:** API routes are defined in separate modules within [src/routes/](mdc:src/routes/) (e.g., [src/routes/flights.ts](mdc:src/routes/flights.ts)). These route modules are imported and registered with the main Hono app using `app.route('/path', routeModule)`.
+*   **Database Connection:** The database connection module ([src/db/index.ts](mdc:src/db/index.ts)) is imported early to ensure the connection is established before the server starts accepting requests.
+*   **OpenAPI Docs:** It sets up endpoints for serving the OpenAPI specification (`/doc`) and the Swagger UI (`/ui`) using `@hono/zod-openapi` and `@hono/swagger-ui`.
+*   **Logging:** Logs the actual listening port and URLs for the API documentation upon successful startup.
+
+## Module Resolution Issues:
+*   We encountered runtime errors (`ERR_MODULE_NOT_FOUND` looking for `.json` or incorrect paths) when importing the database module ([src/db/index.ts](mdc:src/db/index.ts)) from the main entry point ([src/index.ts](mdc:src/index.ts)) using `tsx`.
+*   The current solution involves using an explicit named import (`import { db } from '../db/index.ts';`) rather than importing solely for side effects (`import '../db';`). This seems to help `tsx` resolve the module correctly at runtime.

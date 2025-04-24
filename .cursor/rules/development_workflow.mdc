@@ -1,0 +1,21 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Development Workflow
+
+This project uses `pnpm` as the package manager and `tsx` for running TypeScript code directly during development.
+
+## Key Scripts (from [package.json](mdc:package.json)):
+
+*   **`pnpm dev`**: Starts the development server using `tsx watch src/index.ts`. `tsx` compiles and runs the TypeScript code on the fly, and `watch` restarts the server when source files change.
+*   **`pnpm build`**: Compiles the TypeScript code from `src/` to JavaScript in `dist/` using the settings in [tsconfig.json](mdc:tsconfig.json).
+*   **`pnpm start`**: Runs the compiled JavaScript code from the `dist/` directory using `node dist/index.js`. This is typically used for production or after building.
+*   **`pnpm typecheck`**: Runs the TypeScript compiler (`tsc --noEmit`) to check for type errors without generating JavaScript output. Useful for verifying code correctness before committing or running.
+*   **`pnpm drizzle-kit introspect:sqlite`**: (Requires `drizzle-kit` dev dependency) Connects to the database defined in [drizzle.config.ts](mdc:drizzle.config.ts) and compares its schema to the definitions in [src/db/schema.ts](mdc:src/db/schema.ts). Useful for verifying schema definitions or potentially generating them initially.
+
+## Common Issues & Fixes:
+*   **Port Conflicts:** The `dev` script uses `detect-port` ([src/index.ts](mdc:src/index.ts)) to automatically find an open port if the default (3000) is busy. Check the startup logs for the actual port being used.
+*   **Native Bindings (`better-sqlite3`):** Errors like `Could not locate the bindings file` usually mean the native addon wasn't built correctly. See the [Database Interaction](mdc:database_interaction.mdc) rule for troubleshooting steps (approving build scripts, reinstalling).
+*   **Module Resolution (`tsx`):** Runtime `ERR_MODULE_NOT_FOUND` errors, especially when importing modules for side effects, might require adjusting import statements. See the [Server Startup and Routing](mdc:server_startup.mdc) rule.

@@ -1,0 +1,17 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Database Interaction
+
+The application uses [Drizzle ORM](https://orm.drizzle.team/) to interact with the SQLite database located at [db/travel.sqlite](mdc:db/travel.sqlite).
+
+## Key Files:
+*   **Connection Setup:** [src/db/index.ts](mdc:src/db/index.ts) initializes the `better-sqlite3` connection and the Drizzle instance (`db`). This file is imported for its side effect (establishing the connection) early in the application startup ([src/index.ts](mdc:src/index.ts)).
+*   **Schema Definitions:** [src/db/schema.ts](mdc:src/db/schema.ts) defines the TypeScript representations of the database tables using Drizzle's schema syntax. These schemas are used for type-safe queries.
+*   **ORM Configuration:** [drizzle.config.ts](mdc:drizzle.config.ts) is used by Drizzle Kit for tasks like schema introspection (`pnpm drizzle-kit introspect:sqlite`) to compare the schema file with the actual database.
+*   **Querying:** Database queries are performed within route handlers (e.g., in [src/routes/flights.ts](mdc:src/routes/flights.ts)) using the exported `db` instance from [src/db/index.ts](mdc:src/db/index.ts) and the table schemas from [src/db/schema.ts](mdc:src/db/schema.ts).
+
+## Native Bindings:
+*   The `better-sqlite3` package relies on native C++ bindings. If you encounter errors like "Could not locate the bindings file", ensure the package's build scripts were run correctly during `pnpm install`. This might require running `pnpm approve-builds better-sqlite3` and potentially reinstalling dependencies (`rm -rf node_modules pnpm-lock.yaml && pnpm install`).
