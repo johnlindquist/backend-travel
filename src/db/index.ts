@@ -1,9 +1,13 @@
 import Database from 'better-sqlite3';
 import { drizzle } from 'drizzle-orm/better-sqlite3';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
-// Determine the correct path to the database file relative to the built output
-// Assuming the built output is in dist/ and the original db is in db/
+// ES Module equivalent for __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Determine the correct path to the database file relative to the current module directory
 const dbPath = path.resolve(__dirname, '../../db/travel.sqlite');
 
 // Initialize better-sqlite3
